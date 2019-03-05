@@ -37,7 +37,7 @@ ENV     USE_MPI=y \
 RUN     apt-get update \
         && apt-get -y upgrade \
         && apt-get -y install wget bzip2 ssh python-dev gfortran libopenblas-dev libopenmpi-dev \
-        openmpi-bin tcsh make python-rdkit librdkit1 rdkit-data openbabel \
+        openmpi-bin tcsh make openbabel \
         &&  apt-get clean \
         && mkdir codes \
         && cd codes \
@@ -58,8 +58,7 @@ RUN     apt-get update \
         mv ${NWCHEM_TOP}/src/data/charmm_x ${NWCHEM_DATA} && \
         rm -rf $NWCHEM_TOP/src && \
         rm -rf $NWCHEM_TOP/lib 
-
-RUN     apt-get -y remove  wget ssh tcsh  gfortran  python-dev libopenblas-dev libopenmpi-dev &&  apt-get -y autoremove && apt-get clean
+RUN     apt-get -y remove  ssh tcsh  gfortran  python-dev libopenmpi-dev && apt-get clean
 
 
 ENV     PATH="${NWCHEM_TOP}/bin/LINUX64:$PATH"
@@ -67,7 +66,14 @@ ENV     PATH="${NWCHEM_TOP}/bin/LINUX64:$PATH"
 #
 RUN     mkdir /simulation
 WORKDIR /simulation
- 
+RUN     wget https://raw.githubusercontent.com/mvaliev/NWChemKbaseExample/master/nwchem-scripts/smiles2pdb.py && \
+        wget https://raw.githubusercontent.com/mvaliev/NWChemKbaseExample/master/nwchem-scripts/run_nwchem_smiles && \
+        wget https://raw.githubusercontent.com/mvaliev/NWChemKbaseExample/master/nwchem-scripts/energy-0000.nwt && \
+        chmod 770 run_nwchem_smiles
+RUN     conda install -y -c rdkit rdkit
+
+#ENTRYPOINT ["./run_nwchem_smiles"]
+
 
 # -----------------------------------------
 
