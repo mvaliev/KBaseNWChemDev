@@ -1,0 +1,26 @@
+echo
+
+memory total 2000 Mb
+start mol
+
+permanent_dir ./perm
+
+
+geometry noautoz noautosym
+ load xstructure
+end
+
+basis
+*  library xbasis
+end
+
+charge xcharge
+
+dft
+ mult xmult
+ XC xtheory
+ iterations 500
+end
+
+task dft energy
+
