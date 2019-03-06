@@ -4,7 +4,13 @@ import logging
 import os
 import subprocess as _subprocess
 
+from rdkit import Chem
+from rdkit.Chem import AllChem
+from rdkit.Chem import Descriptors
+
 from installed_clients.KBaseReportClient import KBaseReport
+
+
 #END_HEADER
 
 
@@ -63,12 +69,24 @@ class NWChemKbaseExample:
         s = _subprocess.call([run_nwchem,params['smiles_string']])
         print("output file ",nwchem_output)
         output = _subprocess.run(['cat',nwchem_output],stdout=_subprocess.PIPE)
-        print("nwchem output=",output.stdout.decode('utf-8'))
+        energy = _subprocess.run(['grep','Total DFT',nwchem_output],stdout=_subprocess.PIPE)
+        energy = energy.stdout.decode('utf-8')
+        #print("nwchem output=",output.stdout.decode('utf-8'))
         print("params=",params)
+        mol = Chem.MolFromSmiles(params['smiles_string'])
+        formula = Chem.rdMolDescriptors.CalcMolFormula(mol)
+        print("formula",formula)
         text_message = "".join([
-           'Molecule ',
-           str(params['smiles_string'])
+           'NWChem single point energy calculation:\n',
+           'Molecular SMILE string:',
+           str(params['smiles_string']),
+           '\n',
+           'Molecular Formula: ',formula,
+	   '\n', str(energy).strip(),'\n'
         ])
+        print("\n------------------")
+        print(text_message)
+        print("------------------\n")
         report = KBaseReport(self.callback_url)
         report_info = report.create({'report': {'objects_created':[],
                                                 'text_message': text_message},
