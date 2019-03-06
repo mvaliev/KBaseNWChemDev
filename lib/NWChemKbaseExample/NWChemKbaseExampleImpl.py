@@ -59,10 +59,14 @@ class NWChemKbaseExample:
         run_nwchem = os.environ['NWCHEM_BIN']+"/run_nwchem"
 
         print (run_nwchem)
+        nwchem_output = os.environ['NWCHEM_SIM_DIR']+"/nwchem.out"
         s = _subprocess.call([run_nwchem,'[OH]'])
+        print("output file ",nwchem_output)
+        output = _subprocess.run(['cat',nwchem_output],stdout=_subprocess.PIPE)
+        print("nwchem output=",output.stdout.decode('utf-8'))
         report = KBaseReport(self.callback_url)
         report_info = report.create({'report': {'objects_created':[],
-                                                'text_message': params['parameter_1']},
+                                                'text_message': params['smiles_string']},
                                                 'workspace_name': params['workspace_name']})
         output = {
             'report_name': report_info['name'],
