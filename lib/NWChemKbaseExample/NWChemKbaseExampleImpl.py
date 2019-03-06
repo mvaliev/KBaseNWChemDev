@@ -24,8 +24,8 @@ class NWChemKbaseExample:
     # the latter method is running.
     ######################################### noqa
     VERSION = "0.0.1"
-    GIT_URL = ""
-    GIT_COMMIT_HASH = ""
+    GIT_URL = "https://github.com/mvaliev/NWChemKbaseExample.git"
+    GIT_COMMIT_HASH = "cc97a30dfecc5f9cd6c8fe76d0ff3d867abd7214"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -60,10 +60,11 @@ class NWChemKbaseExample:
 
         print (run_nwchem)
         nwchem_output = os.environ['NWCHEM_SIM_DIR']+"/nwchem.out"
-        s = _subprocess.call([run_nwchem,'[OH]'])
+        s = _subprocess.call([run_nwchem,params['smiles_string']])
         print("output file ",nwchem_output)
         output = _subprocess.run(['cat',nwchem_output],stdout=_subprocess.PIPE)
         print("nwchem output=",output.stdout.decode('utf-8'))
+        print("params=",params)
         report = KBaseReport(self.callback_url)
         report_info = report.create({'report': {'objects_created':[],
                                                 'text_message': params['smiles_string']},
