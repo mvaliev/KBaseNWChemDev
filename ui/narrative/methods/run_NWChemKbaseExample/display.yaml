@@ -26,11 +26,11 @@ suggestions:
 parameters :
     smiles_string :
         ui-name : |
-            SMILES
+            SMILES representation of the molecule
         short-hint : |
-            The smiles string
+            The SMILES string
         long-hint  : |
-            The smiles string that defines molecule
+            The SMILES string that defines molecule
 
 description : |
     <p>Calculate total energy of the molecule using NWChem computational chemistry package. </p>
