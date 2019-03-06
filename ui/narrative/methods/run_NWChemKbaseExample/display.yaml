@@ -4,7 +4,7 @@
 name: NWChem Calculation
 
 tooltip: |
-    Perform some kind of method
+    Perform NWChem calculation for a molecule
 
 screenshots: []
 
