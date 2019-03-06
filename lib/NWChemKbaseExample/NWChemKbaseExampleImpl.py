@@ -89,7 +89,7 @@ class NWChemKbaseExample:
         print("------------------\n")
         report = KBaseReport(self.callback_url)
         report_info = report.create_extended_report({'report': {'objects_created':[],
-                                                'text_message': text_message},
+                                                'message': text_message},
                                                 'workspace_name': params['workspace_name']})
         output = {
             'report_name': report_info['name'],
