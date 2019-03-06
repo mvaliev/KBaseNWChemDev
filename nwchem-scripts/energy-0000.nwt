@@ -3,6 +3,7 @@ echo
 memory total 2000 Mb
 start mol
 
+scratch_dir ./data
 permanent_dir ./perm
 
 
