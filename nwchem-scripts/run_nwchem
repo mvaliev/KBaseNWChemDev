@@ -3,7 +3,9 @@
 echo $1
 echo ${NWCHEM_SIM_DIR}
 cd ${NWCHEM_SIM_DIR}
-ls
+rm -rf *
+echo "contents of ${NWCHEM_SIM_DIR}"
+ls ${NWCHEM_SIM_DIR}
 smiles2pdb $1
 cat mol.pdb
 
