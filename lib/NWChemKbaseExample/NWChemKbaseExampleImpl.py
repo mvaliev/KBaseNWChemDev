@@ -65,9 +65,13 @@ class NWChemKbaseExample:
         output = _subprocess.run(['cat',nwchem_output],stdout=_subprocess.PIPE)
         print("nwchem output=",output.stdout.decode('utf-8'))
         print("params=",params)
+        text_message = "".join([
+           'Molecule ',
+           str(params['smiles_string'])
+        ])
         report = KBaseReport(self.callback_url)
         report_info = report.create({'report': {'objects_created':[],
-                                                'text_message': params['smiles_string']},
+                                                'text_message': text_message},
                                                 'workspace_name': params['workspace_name']})
         output = {
             'report_name': report_info['name'],
