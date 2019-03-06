@@ -60,27 +60,21 @@ RUN     conda install -y -c rdkit rdkit
 
 
 ENV     PATH="${NWCHEM_TOP}/bin/LINUX64:$PATH"
-#
-#
-ENV     NWCHEM_SCRIPTS=https://raw.githubusercontent.com/mvaliev/NWChemKbaseExample/master/nwchem-scripts
 ENV     NWCHEM_SIM_DIR="/simulation"
 ENV     NWCHEM_BIN=${NWCHEM_TOP}/bin/LINUX64
 
 RUN     mkdir /simulation
 WORKDIR /simulation
 
-RUN     wget ${NWCHEM_SCRIPTS}/smiles2pdb -O${NWCHEM_BIN}/smiles2pdb && \
-        chmod 770 ${NWCHEM_BIN}/smiles2pdb && \
-        wget ${NWCHEM_SCRIPTS}/run_nwchem -O${NWCHEM_BIN}/run_nwchem && \
-        chmod 770 ${NWCHEM_BIN}/run_nwchem 
-
 ENV     NWCHEM_TEMPLATES_DIR=${NWCHEM_DATA}/templates
-RUN     mkdir ${NWCHEM_TEMPLATES_DIR} &&  \
-        wget ${NWCHEM_SCRIPTS}/energy-0000.nwt -O${NWCHEM_TEMPLATES_DIR}/energy-0000.nwt 
 
 #ENTRYPOINT ["./run_nwchem_smiles"]
+COPY ./nwchem-scripts/smiles2pdb ${NWCHEM_BIN}/
+COPY ./nwchem-scripts/run_nwchem ${NWCHEM_BIN}/
+COPY ./nwchem-scripts/energy-0000.nwt ${NWCHEM_TEMPLATES_DIR}/
 
-
+RUN     chmod 770 ${NWCHEM_BIN}/smiles2pdb && \
+        chmod 770 ${NWCHEM_BIN}/run_nwchem 
 # -----------------------------------------
 
 COPY ./ /kb/module
