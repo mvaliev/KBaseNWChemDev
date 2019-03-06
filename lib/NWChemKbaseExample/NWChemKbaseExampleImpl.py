@@ -87,14 +87,28 @@ class NWChemKbaseExample:
         print("\n------------------")
         print(text_message)
         print("------------------\n")
-        report = KBaseReport(self.callback_url)
-        report_info = report.create_extended_report({'report': {'objects_created':[],
-                                                'message': text_message},
-                                                'workspace_name': params['workspace_name']})
-        output = {
-            'report_name': report_info['name'],
-            'report_ref': report_info['ref'],
+
+        reportObj = {
+            'objects_created': [],
+            'text_message': text_message
         }
+        report = KBaseReport(self.callback_url)
+        report_info = report.create({'report': reportObj, 'workspace_name': params['workspace_name']})
+
+
+        # STEP 6: contruct the output to send back
+        output = {'report_name': report_info['name'],
+                  'report_ref': report_info['ref'],
+                  }
+
+#        report = KBaseReport(self.callback_url)
+#        report_info = report.create_extended_report({'report': {'objects_created':[],
+#                                                'message': text_message},
+#                                                'workspace_name': params['workspace_name']})
+#        output = {
+#            'report_name': report_info['name'],
+#            'report_ref': report_info['ref'],
+#        }
         #END run_NWChemKbaseExample
 
         # At some point might do deeper type checking...
