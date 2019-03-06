@@ -59,22 +59,20 @@ RUN     apt-get -y remove  ssh tcsh  gfortran  python-dev libopenmpi-dev && apt-
 RUN     conda install -y -c rdkit rdkit
 
 
-ENV     PATH="${NWCHEM_TOP}/bin/LINUX64:$PATH"
 ENV     NWCHEM_SIM_DIR="/simulation"
 ENV     NWCHEM_BIN=${NWCHEM_TOP}/bin/LINUX64
-
-RUN     mkdir /simulation
-WORKDIR /simulation
-
 ENV     NWCHEM_TEMPLATES_DIR=${NWCHEM_DATA}/templates
+ENV     PATH="${NWCHEM_BIN}:$PATH"
 
-#ENTRYPOINT ["./run_nwchem_smiles"]
 COPY ./nwchem-scripts/smiles2pdb ${NWCHEM_BIN}/
 COPY ./nwchem-scripts/run_nwchem ${NWCHEM_BIN}/
 COPY ./nwchem-scripts/energy-0000.nwt ${NWCHEM_TEMPLATES_DIR}/
 
 RUN     chmod 770 ${NWCHEM_BIN}/smiles2pdb && \
-        chmod 770 ${NWCHEM_BIN}/run_nwchem 
+        chmod 770 ${NWCHEM_BIN}/run_nwchem && \
+        mkdir ${NWCHEM_SIM_DIR}
+
+#ENTRYPOINT ["run_nwchem"]
 # -----------------------------------------
 
 COPY ./ /kb/module
