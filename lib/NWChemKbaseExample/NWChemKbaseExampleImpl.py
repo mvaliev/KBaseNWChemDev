@@ -2,6 +2,7 @@
 #BEGIN_HEADER
 import logging
 import os
+import subprocess as _subprocess
 
 from installed_clients.KBaseReportClient import KBaseReport
 #END_HEADER
@@ -51,6 +52,14 @@ class NWChemKbaseExample:
         # ctx is the context object
         # return variables are: output
         #BEGIN run_NWChemKbaseExample
+        #s = _subprocess.call(["echo $NWCHEM_EXECUTABLE"])
+        s = _subprocess.call(["ls"])
+        print(s)
+        nwchem = os.environ['NWCHEM_EXECUTABLE']
+        run_nwchem = os.environ['NWCHEM_BIN']+"/run_nwchem"
+
+        print (run_nwchem)
+        s = _subprocess.call([run_nwchem,'[OH]'])
         report = KBaseReport(self.callback_url)
         report_info = report.create({'report': {'objects_created':[],
                                                 'text_message': params['parameter_1']},
