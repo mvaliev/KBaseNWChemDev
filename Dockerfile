@@ -13,14 +13,11 @@ ENV     USE_MPI=y \
         USE_MPIF=y \
         USE_MPIF4=y \
         NWCHEM_TARGET=LINUX64 \
-#        USE_PYTHONCONFIG=y \
-#        PYTHONVERSION=2.7 \
-#        PYTHONHOME=/usr \
         BLASOPT="-lopenblas -lpthread -lrt" \
         BLAS_SIZE=4 \
         USE_64TO32=y \
         NWCHEM_MODULES="smallqm" \
-        NWCHEM_EXECUTABLE=${NWCHEM_DATA}/bin/LINUX64/nwchem \
+        NWCHEM_EXECUTABLE=${NWCHEM_TOP}/bin/LINUX64/nwchem \
         NWCHEM_BASIS_LIBRARY=${NWCHEM_DATA}/libraries/ \
         NWCHEM_NWPW_LIBRARY=${NWCHEM_DATA}/libraryps/  \
         FFIELD=amber  \
@@ -59,18 +56,27 @@ RUN     apt-get update \
         rm -rf $NWCHEM_TOP/src && \
         rm -rf $NWCHEM_TOP/lib 
 RUN     apt-get -y remove  ssh tcsh  gfortran  python-dev libopenmpi-dev && apt-get clean
+RUN     conda install -y -c rdkit rdkit
 
 
 ENV     PATH="${NWCHEM_TOP}/bin/LINUX64:$PATH"
 #
 #
+ENV     NWCHEM_SCRIPTS=https://raw.githubusercontent.com/mvaliev/NWChemKbaseExample/master/nwchem-scripts
+ENV     NWCHEM_SIM_DIR="/simulation"
+ENV     NWCHEM_BIN=${NWCHEM_TOP}/bin/LINUX64
+
 RUN     mkdir /simulation
 WORKDIR /simulation
-RUN     wget https://raw.githubusercontent.com/mvaliev/NWChemKbaseExample/master/nwchem-scripts/smiles2pdb.py && \
-        wget https://raw.githubusercontent.com/mvaliev/NWChemKbaseExample/master/nwchem-scripts/run_nwchem_smiles && \
-        wget https://raw.githubusercontent.com/mvaliev/NWChemKbaseExample/master/nwchem-scripts/energy-0000.nwt && \
-        chmod 770 run_nwchem_smiles
-RUN     conda install -y -c rdkit rdkit
+
+RUN     wget ${NWCHEM_SCRIPTS}/smiles2pdb -O${NWCHEM_BIN}/smiles2pdb && \
+        chmod 770 ${NWCHEM_BIN}/smiles2pdb && \
+        wget ${NWCHEM_SCRIPTS}/run_nwchem -O${NWCHEM_BIN}/run_nwchem && \
+        chmod 770 ${NWCHEM_BIN}/run_nwchem 
+
+ENV     NWCHEM_TEMPLATES_DIR=${NWCHEM_DATA}/templates
+RUN     mkdir ${NWCHEM_TEMPLATES_DIR} &&  \
+        wget ${NWCHEM_SCRIPTS}/energy-0000.nwt -O${NWCHEM_TEMPLATES_DIR}/energy-0000.nwt 
 
 #ENTRYPOINT ["./run_nwchem_smiles"]
 
