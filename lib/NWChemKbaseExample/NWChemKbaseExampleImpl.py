@@ -94,7 +94,7 @@ class NWChemKbaseExample:
 #        }
 #        report = KBaseReport(self.callback_url)
 #        report_info = report.create({'report': reportObj, 'workspace_name': params['workspace_name']})
-        report_params = {'message': '',
+        report_params = {'message': text_message,
                          'workspace_name': params.get('workspace_name')}
 
         kbase_report_client = KBaseReport(self.callback_url)
