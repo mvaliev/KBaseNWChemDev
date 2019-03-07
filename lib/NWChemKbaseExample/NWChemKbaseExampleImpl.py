@@ -88,12 +88,17 @@ class NWChemKbaseExample:
         print(text_message)
         print("------------------\n")
 
-        reportObj = {
-            'objects_created': [],
-            'text_message': text_message
-        }
-        report = KBaseReport(self.callback_url)
-        report_info = report.create({'report': reportObj, 'workspace_name': params['workspace_name']})
+#        reportObj = {
+#            'objects_created': [],
+#            'text_message': text_message
+#        }
+#        report = KBaseReport(self.callback_url)
+#        report_info = report.create({'report': reportObj, 'workspace_name': params['workspace_name']})
+        report_params = {'message': '',
+                         'workspace_name': params.get('workspace_name')}
+
+        kbase_report_client = KBaseReport(self.callback_url)
+        report_info = kbase_report_client.create_extended_report(report_params)
 
 
         # STEP 6: contruct the output to send back
