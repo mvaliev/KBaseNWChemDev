@@ -9,7 +9,9 @@ from rdkit.Chem import AllChem
 from rdkit.Chem import Descriptors
 
 from installed_clients.KBaseReportClient import KBaseReport
+import uuid
 
+from nwchem_utils.nwchem_utils import hello, generate_report
 
 #END_HEADER
 
@@ -44,6 +46,8 @@ class NWChemKbaseExample:
         self.shared_folder = config['scratch']
         logging.basicConfig(format='%(created)s %(levelname)s: %(message)s',
                             level=logging.INFO)
+        self.scratch = config['scratch']
+        print('IN INIT DIRECTORY')
         #END_CONSTRUCTOR
         pass
 
@@ -58,6 +62,10 @@ class NWChemKbaseExample:
         # ctx is the context object
         # return variables are: output
         #BEGIN run_NWChemKbaseExample
+
+        result_directory = os.path.join(self.scratch, str(uuid.uuid4()))
+#        self._mkdir_p(result_directory)
+
         #s = _subprocess.call(["echo $NWCHEM_EXECUTABLE"])
         s = _subprocess.call(["ls"])
         print(s)
@@ -86,6 +94,7 @@ class NWChemKbaseExample:
         ])
         print("\n------------------")
         print(text_message)
+        hello()
         print("------------------\n")
 
 #        reportObj = {
@@ -94,12 +103,13 @@ class NWChemKbaseExample:
 #        }
 #        report = KBaseReport(self.callback_url)
 #        report_info = report.create({'report': reportObj, 'workspace_name': params['workspace_name']})
-        report_params = {'message': text_message,
-                         'workspace_name': params.get('workspace_name')}
+        # report_params = {'message': text_message,
+        #                  'workspace_name': params.get('workspace_name')}
 
-        kbase_report_client = KBaseReport(self.callback_url)
-        report_info = kbase_report_client.create_extended_report(report_params)
+        # kbase_report_client = KBaseReport(self.callback_url)
+        # report_info = kbase_report_client.create_extended_report(report_params)
 
+        report_info = generate_report(params,self.callback_url )
 
         # STEP 6: contruct the output to send back
         output = {'report_name': report_info['name'],
